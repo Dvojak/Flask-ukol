@@ -1,32 +1,25 @@
-# Použití základního Python image
+# Use a base Python image
 FROM python:3.12-slim
 
-# Instalace základních nástrojů pro kompilaci
+# Install essential build tools
 RUN apt-get update && apt-get install -y \
     build-essential \
     gcc \
     libffi-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Nastavení pracovního adresáře
+# Set the working directory
 WORKDIR /app
 
-# Kopírování požadavků a jejich instalace
+# Copy requirements and install them
 COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Kopírování aplikace do kontejneru
+# Copy the application code
 COPY . .
 
-# Inicializace databáze
-RUN alembic -c migrations/alembic.ini -x db=dev upgrade head
-
-# Nastavení prostředí pro Flask
+# Set environment variables for Flask
 ENV FLASK_RUN_HOST=0.0.0.0
-ENV FLASK_RUN_PORT=5000
 
-# Exponování portu
-EXPOSE 5000
-
-# Spuštění aplikace
-CMD ["flask", "run"]
+# Default command to run Alembic migrations and start the Flask app
+CMD ["sh", "-c", "alembic -c migrations/alembic.ini -x db=dev upgrade head && flask run"]
