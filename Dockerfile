@@ -21,5 +21,8 @@ COPY . .
 # Set environment variables for Flask
 ENV FLASK_RUN_HOST=0.0.0.0
 
+# Expose the port that the Flask app runs on
+EXPOSE 5000
+
 # Default command to run Alembic migrations and start the Flask app
 CMD ["sh", "-c", "alembic -c migrations/alembic.ini -x db=dev upgrade head && flask run"]
