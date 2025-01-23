@@ -20,6 +20,7 @@ COPY . .
 
 # Set environment variables for Flask
 ENV FLASK_RUN_HOST=0.0.0.0
+ENV FLASK_ENV=development
 
 # Expose the port that the Flask app runs on
 EXPOSE 5000
